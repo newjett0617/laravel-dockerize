@@ -1,0 +1,25 @@
+version: '3.8'
+
+networks:
+  app-network:
+    driver: bridge
+  app-mysql:
+    external:
+      name: dockerhost.mysql
+
+services:
+  app:
+    image: laravel.test/app
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    restart: always
+    expose:
+      - 80
+    ports:
+      - ${APP_PORT}:80
+    networks:
+      - app-network
+      - app-mysql
+    extra_hosts:
+      - dockerhost.mysql:${DOCKER_HOST_MYSQL_IP}
